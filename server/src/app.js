@@ -1,9 +1,9 @@
 const express =require('express');
-const cookies=require('cookie-parser');
 const app=express();
 const List=require('./models/lists');
 const cookieParser = require('cookie-parser');
 const authRoutes=require('./routes/auth');
+const auth=require('./middleware/authMiddleware');
 
 
 
@@ -11,14 +11,15 @@ const authRoutes=require('./routes/auth');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth',authRoutes);
-app.post('/api/lists',async (req,res)=>{
+app.post('/api/lists',auth,async (req,res)=>{
     try{
         const{name,description,completed,createdAt} = req.body;
         const ListItem=new List({
             name,
             description,
             completed,
-            createdAt
+            createdAt,
+            owner:req.user.id
         });
         await ListItem.save();
         res.status(201).json(ListItem);
@@ -28,9 +29,9 @@ app.post('/api/lists',async (req,res)=>{
     } 
 });
 
-app.get('/api/lists',async(req,res)=>{
+app.get('/api/lists',auth,async(req,res)=>{
     try{
-        const Lists=await List.find();
+        const Lists=await List.find({owner:req.user.id});
         res.status(200).json(Lists);
     }
     catch(error){
@@ -38,13 +39,16 @@ app.get('/api/lists',async(req,res)=>{
     }
 });
 
-app.patch('/api/lists/:id',async(req,res)=>{
+app.patch('/api/lists/:id',auth,async(req,res)=>{
     try{
         const {id}=req.params;
         const {name,description,completed}=req.body;
-        const ListItem=await List.findByIdAndUpdate(id,{name,description,completed},{new:true});
+        const ListItem=await List.findOneAndUpdate(
+            { _id: id, owner: req.user.id },
+            { name, description, completed }, 
+            { new: true });
         if(!ListItem){
-            return res.status(404).json({error:'List item not found'});
+            return res.status(404).json({error:'List item not found or unauthorized'});
         }
         res.status(200).json(ListItem);
     }
@@ -53,12 +57,14 @@ app.patch('/api/lists/:id',async(req,res)=>{
     }
 });
 
-app.delete('/api/lists/:id',async(req,res)=>{
+app.delete('/api/lists/:id',auth,async(req,res)=>{
     try{
         const {id}=req.params;
-        const ListItem=await List.findByIdAndDelete(id);
+        const ListItem=await List.findOneAndDelete(
+            { _id: id, owner: req.user.id }
+        );
         if(!ListItem){
-            return res.status(404).json({error:'List item not found'});
+            return res.status(404).json({error:'List item not found or unauthorized'});
         }
         res.status(200).json({message:'List item deleted successfully'});
     }

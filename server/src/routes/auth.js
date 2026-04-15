@@ -6,7 +6,9 @@ const jwt=require('jsonwebtoken');
 router.post('/register',async(req,res)=>{
     try{
         const {username,email,password}=req.body;
-        const existingUser=await User.findOne({email,username});
+        const existingUser=await User.findOne({
+            $or: [{email}, {username}]
+        });
         if(existingUser){
             return res.status(400).json({error:'Email or username already in use'});
         }
