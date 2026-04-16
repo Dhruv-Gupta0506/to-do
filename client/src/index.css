@@ -1,1 +1,104 @@
 @import "tailwindcss";
+
+@layer components {
+
+  /* --- AUTH STYLING (Kept exactly as you had it) --- */
+  .auth-page {
+    @apply flex justify-center items-center min-h-screen bg-gray-50 p-4;
+  }
+
+  .auth-card {
+    @apply bg-white p-8 rounded-xl shadow-xl w-full max-w-md border border-gray-100;
+  }
+
+  .auth-title {
+    @apply text-3xl font-extrabold text-center text-gray-900 mb-8;
+  }
+
+  .auth-toggle {
+    @apply text-center mt-6 text-sm text-blue-600 font-medium cursor-pointer hover:text-blue-800 transition-colors hover:underline;
+  }
+
+  .custom-input {
+    @apply w-full p-3 my-2 border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-gray-50;
+  }
+
+  .custom-input:focus {
+    @apply border-blue-500 ring-4 ring-blue-100 bg-white;
+  }
+
+  .custom-button {
+    @apply w-full bg-blue-600 text-white py-3 rounded-lg mt-4 font-bold 
+           hover:bg-blue-700 active:scale-[0.98] transition-all cursor-pointer shadow-md;
+  }
+
+  /* --- DASHBOARD STYLING (New Additions) --- */
+
+  .dashboard-page {
+    @apply min-h-screen bg-gray-50 p-6 md:p-10;
+  }
+
+  /* Logout bar at the top right */
+  .top-bar {
+    @apply flex justify-end mb-8;
+  }
+
+  .logout-btn {
+    @apply bg-red-50 text-red-600 px-4 py-2 rounded-lg font-semibold hover:bg-red-100 transition-colors border border-red-200;
+  }
+
+  .dashboard-page h1 {
+    @apply text-3xl font-black text-gray-800 mb-8 text-center;
+  }
+
+  /* Add Task Form - Horizontal on large screens, vertical on mobile */
+  .add-task-form {
+    @apply bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col md:flex-row gap-4 mb-10 items-end;
+  }
+
+  .add-task-form input {
+    @apply w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 transition-all;
+  }
+
+  .add-task-form button {
+    @apply bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-all whitespace-nowrap shadow-lg active:scale-95;
+  }
+
+  /* Task List Grid */
+  .task-container {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .task-card {
+    @apply bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between;
+  }
+
+  .task-card h3 {
+    @apply text-xl font-bold text-gray-800 mb-2 truncate;
+  }
+
+  .task-card p {
+    @apply text-gray-600 mb-4 line-clamp-2;
+  }
+
+  .task-card small {
+    @apply block text-gray-400 mb-4 italic;
+  }
+
+  /* Action Buttons inside Card */
+  .task-actions {
+    @apply flex gap-3 border-t border-gray-50 pt-4 mt-auto;
+  }
+
+  /* Toggle Button Styles */
+  .task-actions button:first-child {
+    @apply flex-1 py-2 rounded-md font-semibold text-sm transition-all;
+    @apply bg-green-50 text-green-600 hover:bg-green-100 border border-green-200;
+  }
+
+  /* Delete Button Styles */
+  .task-actions button:last-child {
+    @apply px-4 py-2 rounded-md font-semibold text-sm transition-all;
+    @apply bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-600 border border-gray-200 hover:border-red-200;
+  }
+}
